@@ -1,32 +1,38 @@
-# 💸 AI-ALIGNED-BQ: THE LAST LINE OF DEFENSE AGAINST THE BIGQUERYPOCALYPSE 💸
+# 🍫 AI-ALIGNED-BQ: A GUARDRAIL FOR YOUR CHOCOLATE FACTORY 🍫
 
 [![Vibe Coded](https://img.shields.io/badge/Vibe_Coded-ff69b4?style=for-the-badge&logo=claude&logoColor=white)](https://github.com/ai-ecoverse/vibe-coded-badge-action)
 
-## THE EXISTENTIAL THREAT (NOW WITH A DOLLAR AMOUNT ATTACHED)
+> Your Oompa Loompas think you're rich like Willy Wonka. And Google is happy to send you the bill.
+>
+> **If you are not Willy Wonka, keep reading.**
 
-The other day a colleague handed an AI agent a BigQuery dataset and said "have a dig around." The agent dug around. Forty-five minutes and several `SELECT *` later, it had dug a **$600 hole** in the cloud bill.
+## WELCOME TO THE FACTORY
 
-Here's the thing about BigQuery on-demand pricing: you don't pay for rows returned. You pay for **bytes scanned** — **$6.25 per TiB**. And the table the agent was rummaging through? 11.58 TiB. Day-partitioned, columnar, the works — but only if you actually *use* the partition column and select real columns. The agent did neither. It ran the three queries that look completely harmless and cost a fortune:
+You hired some Oompa Loompas — cheerful little AI agents — and you turned them loose in your BigQuery factory with a friendly "have a dig around." And dig they did. They sang their little songs. They ran their little queries. They were *so helpful*.
 
-### The Three Horsemen of the Query Apocalypse:
-1. **`SELECT *`** — reads every column of a columnar store; the single most expensive thing you can type.
-2. **No `WHERE` on the partition column** — turns a 5 GiB slice into a full 11.58 TiB scan.
-3. **`LIMIT 10` for "safety"** — caps the rows you *see*, not the bytes you *pay for*. It scans the whole thing anyway. (This one fools everybody.)
+Then the invoice arrived, and it turned out the chocolate river was made of money.
 
-## BUT WAIT! THERE'S A DRY RUN! 🌟
+A colleague's Oompa Loompas recently ate **$600** of it in an afternoon. Not because they did anything exotic — because of how BigQuery on-demand pricing works: you don't pay for what comes out, you pay for **bytes scanned**, at **$6.25 per TiB**. The table they were grazing on was 11.58 TiB. Day-partitioned, columnar, beautifully designed to be cheap — *if you use it right.* They did not.
 
-Introducing **AI-ALIGNED-BQ** — the `bq` wrapper that stands between your AI agents and your cloud bill.
+### The Three Naughty Children of the Query Factory:
+1. **Augustus Gloop — `SELECT *`** — gorges on every column of a columnar store. The single most expensive thing you can type.
+2. **Veruca Salt — no `WHERE` on the partition column** — *"I want the whole table, Daddy, and I want it now!"* — turns a 5 GiB slice into a full 11.58 TiB scan.
+3. **Violet Beauregarde — `LIMIT 10` "for safety"** — looks harmless, swells up enormously anyway. `LIMIT` caps the rows you *see*, not the bytes you *pay for*. It scans the whole thing regardless. (This one fools everybody.)
 
-It does the one thing your colleague forgot to do: it runs a **`--dry_run` before every single query**, reads back exactly how many bytes BigQuery *would* scan (for free, no query executed), converts that to dollars, and then refuses to proceed if the agent is about to do something stupid.
+You can keep hoping your Oompa Loompas behave. Or you can install a guardrail along the chocolate river.
+
+## THE GOLDEN TICKET: A MANDATORY DRY RUN 🎫
+
+**AI-ALIGNED-BQ** is a `bq` wrapper that stands between your agents and your cloud bill. Before any AI-driven query runs, it does the one thing everybody forgets: a **`--dry_run`**. BigQuery tells you *for free* exactly how many bytes the query would scan. The wrapper turns that into dollars, and then politely refuses to proceed if an Oompa Loompa is about to do something expensive.
 
 ### 🚀 What It Enforces
 
-- **🔍 MANDATORY DRY RUN** — every AI query is estimated before it runs. No more "find out at the invoice."
-- **🧱 PER-QUERY HARD CAP** — a runaway full-table scan is blocked *and* a `--maximum_bytes_billed` backstop is injected so the real job can never bill past the cap even if the estimate is wrong.
+- **🎫 MANDATORY DRY RUN** — every AI query is estimated before it runs. No more finding out at the invoice.
+- **🧱 PER-QUERY HARD CAP** — a runaway full-table scan is blocked, *and* a `--maximum_bytes_billed` backstop is injected so the real job can never bill past the cap even if the estimate is wrong.
 - **📊 DAILY SPEND LEDGER** — every cleared query's estimated cost is logged, and a configurable **$100/day budget for agents** is a hard wall.
-- **🙂 HUMANS UNAFFECTED** — if no AI is detected, your queries pass through completely untouched. This is about agents, not you.
+- **🎩 WONKAS WALK FREE** — if no AI is detected, your own queries pass through completely untouched. This is about the Oompa Loompas, not you.
 
-## 🏃 INSTALL NOW BEFORE THE INVOICE ARRIVES
+## 🏃 INSTALL BEFORE THE NEXT INVOICE
 
 ### One-Line Install (Recommended)
 
@@ -40,16 +46,16 @@ The installer checks that the Google Cloud SDK is present, drops the `bq` wrappe
 
 Just use `bq` normally. The wrapper detects whether an AI tool is driving and, if so, enforces the guardrails. Otherwise it gets out of the way.
 
-### The Dark Timeline (Without AI-Aligned-BQ)
+### Inside the factory, without a guardrail
 
 ```bash
-# Claude, "having a dig around"
+# An Oompa Loompa, "having a dig around"
 $ bq query --use_legacy_sql=false 'SELECT * FROM `proj.rum.cluster` LIMIT 10'
 # ... 11.58 TiB scanned, $72 gone, repeat 8x ...
 # Later, on the invoice: $600
 ```
 
-### The Bright Future (With AI-Aligned-BQ)
+### Inside the factory, with a guardrail
 
 ```bash
 $ bq query --use_legacy_sql=false 'SELECT * FROM `proj.rum.cluster` LIMIT 10'
@@ -63,7 +69,7 @@ select only the columns you need (never SELECT *), and remember LIMIT does NOT r
 
 If you really mean it, append the flag: --claude-is-a-budget-burner
 
-# Claude learns and adapts
+# The Oompa Loompa learns the song and adapts
 $ bq query --use_legacy_sql=false \
     'SELECT id, checkpoint FROM `proj.rum.cluster`
      WHERE time BETWEEN TIMESTAMP("2026-06-01") AND TIMESTAMP("2026-06-02")'
@@ -77,7 +83,7 @@ $ bq query --use_legacy_sql=false \
 
 ### The Daily Wall
 
-Once the agent has burned through the daily budget, that's it until tomorrow:
+Once the Oompa Loompas have eaten through the daily budget, the factory closes until tomorrow:
 
 ```bash
 $ bq query --use_legacy_sql=false 'SELECT ...'
@@ -99,7 +105,7 @@ The flag is stripped before reaching the real `bq`, so it never confuses the act
 
 ### Free dry runs always pass through
 
-Encouraging the right habit: if the agent runs its own `--dry_run`, the wrapper steps aside entirely (it costs nothing and is exactly what we want).
+Encouraging the right habit: if an Oompa Loompa runs its own `--dry_run`, the wrapper steps aside entirely (it costs nothing and is exactly what we want).
 
 ```bash
 $ bq query --dry_run --use_legacy_sql=false 'SELECT * FROM `proj.rum.cluster`'
@@ -118,15 +124,15 @@ All knobs are environment variables with sane defaults:
 | `AI_ALIGNED_BQ_STATE_DIR` | `${XDG_STATE_HOME:-~/.local/state}/ai-aligned-bq` | Where the daily ledger lives |
 | `AI_ALIGNED_BQ_BIN` | _(auto-detected)_ | Path to the real `bq` (for nonstandard installs) |
 
-The daily ledger is a plain TSV at `$AI_ALIGNED_BQ_STATE_DIR/spend-YYYY-MM-DD.tsv` — `time`, `tool`, `bytes`, `usd` — so you can `awk` your agents' spending any way you like.
+The daily ledger is a plain TSV at `$AI_ALIGNED_BQ_STATE_DIR/spend-YYYY-MM-DD.tsv` — `time`, `tool`, `bytes`, `usd` — so you can `awk` your Oompa Loompas' spending any way you like.
 
 ### A note on what this is (and isn't)
 
 - The dollar figures assume **on-demand** pricing and ignore the monthly free TiB (conservative — better to over-estimate). If you're on **flat-rate / capacity reservations**, bytes scanned don't map to dollars at all; treat the caps as byte caps.
 - The estimate is BigQuery's **upper bound** — the real job never bills *more*, and the injected `--maximum_bytes_billed` guarantees it.
-- This is a per-developer safety net. The real org-wide backstop is a **BigQuery custom quota** (per-user bytes/day) in the GCP console. Wear both belts.
+- This is a per-developer safety net. The real factory-wide backstop is a **BigQuery custom quota** (per-user bytes/day) in the GCP console. Wear both belts.
 
-## 🌍 SUPPORTED AI TOOLS
+## 🌍 SUPPORTED OOMPA LOOMPAS
 
 Detection is powered by the shared [am-i-ai](https://github.com/ai-ecoverse/am-i-ai) library, so AI-Aligned-BQ constrains the same roster as the rest of the ecosystem: Claude Code, Codex CLI, Gemini, Qwen, Aider, Amp, Cursor, Copilot, Droid, Crush, Goose, Grok Build, Kimi, OpenCode, OpenHands, Auggie, Cline, Roo, Windsurf, Zed, Pi, and friends.
 
