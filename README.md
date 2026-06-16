@@ -2,6 +2,8 @@
 
 [![Vibe Coded](https://img.shields.io/badge/Vibe_Coded-ff69b4?style=for-the-badge&logo=claude&logoColor=white)](https://github.com/ai-ecoverse/vibe-coded-badge-action)
 
+![AI-ALIGNED-BQ — a colossal mountain of money outweighs a single slice of cake: the bytes you scan, not the rows you see](media/hero.jpg)
+
 > Your Oompa Loompas think you're rich like Willy Wonka. And Google is happy to send you the bill.
 >
 > **If you are not Willy Wonka, keep reading.**
